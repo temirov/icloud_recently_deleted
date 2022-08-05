@@ -12,18 +12,18 @@ The third option is to delete the files from the recently deleted folder. Alas, 
 
 ## Solution
 
-Here is a very crude solution that can help in case you need to restore access to your Apple services without paying for upgrade or waiting for the 30 days after the deletion.
+Here is a _very crude_ solution that can help in case you need to restore access to your Apple services without paying for upgrade or waiting for the 30 days after the deletion.
  
 1. Log into icloud.com. Go to the account settings. Click on recent files. Wait for the screen to load.
 
 ![](icloud%20recently%20deleted.png)
  
-2. Run the script
-    1. Open Development tools of the browser
-    1. Choose the iframe for the execution context.
-    1. Copy-paste the following snippet into the console.
+2. Prepare the script
+    1. Open the Development tools of the browser
+    2. Go to Sources -> Snippets -> New snippet 
+    3. Copy-paste the code below
+    4. Save the snippet
 
-Open developers tools. Go to sources, snippets and add the following snippet.
 ```javascript
 function deleteDocs() {
     document
@@ -43,16 +43,18 @@ const filesToDelete = 5000;
 const batchSize = 3;
 const timeOutInMs = 2000;
 
-# Change script execution context
-const frame = document.getElementById("frame1").contentWindow;
-cd(frame);
-
 for (let index = 0; index < (filesToDelete / batchSize); index++) {
     setTimeout(deleteDocs, timeOutInMs * index);
 }
 ```
 
-Save and execute the script.
+1. Choose the iframe for the execution context (CSS class "cloudos-host"). Clicking on it in the elemtns pane will work, too.
+
+![](Screen%20Shot%202022-08-04%20at%209.00.15%20PM.png)
+
+1. Execute the script.
+
+
 
 ## No warranties
  
