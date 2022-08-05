@@ -26,14 +26,17 @@ Here is a _very crude_ solution that can help in case you need to restore access
 
 ```javascript
 function deleteDocs() {
+    // Select files
     document
         .querySelectorAll(".cw-ui-checkbox:not(.select-all-docs) input[type=checkbox]")
         .forEach(
             function(el){el.click();}
         );
+    // Click delete
     document
         .getElementsByClassName("purge-action-button")[0]
         .click();
+    // Confirm deletion
     document
         .getElementsByClassName("destructive")[0]
         .click();
@@ -54,7 +57,7 @@ for (let index = 0; index < (filesToDelete / batchSize); index++) {
 
 1. Execute the script.
 
-
+![](Screen%20Shot%202022-08-04%20at%209.13.29%20PM.png)
 
 ## No warranties
  
