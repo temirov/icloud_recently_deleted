@@ -83,7 +83,7 @@ if (documentsFound(documentsSelector)) {
 
 1. Execute the script.
 
-![](Screen%20Shot%202022-08-04%20at%209.13.29%20PM.png)
+![](ExecuteScript.png)
 
 ## No warranties
  
