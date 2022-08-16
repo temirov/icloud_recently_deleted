@@ -25,29 +25,55 @@ Here is a _very crude_ solution that can help in case you need to restore access
     4. Save the snippet
 
 ```javascript
-function deleteDocs() {
-    // Select files
-    document
-        .querySelectorAll(".cw-ui-checkbox:not(.select-all-docs) input[type=checkbox]")
-        .forEach(
-            function(el){el.click();}
-        );
-    // Click delete
-    document
-        .getElementsByClassName("purge-action-button")[0]
-        .click();
-    // Confirm deletion
-    document
-        .getElementsByClassName("destructive")[0]
-        .click();
+const pipe = (...funcs) => v => {
+  return funcs.reduce((res, func) => {
+    return func(res);
+  }, v);
+};
+
+const findAllByClassName = (selector) => document.getElementsByClassName(selector);
+const findAll = (selector) => document.querySelectorAll(selector);
+const getFirstElement = (nodeList) => nodeList[0];
+const clickAllNodes = (nodeList) => nodeList.forEach( (node) => node.click() );
+const click = (el) => el.click();
+const length = (list) => list.length;
+
+function executeInBatches(total, batchSize, timeOutInMs, callFn) {
+    let batches = total / batchSize;
+    let remainder = total % batchSize;
+    for (let index = 0; index < batches + remainder; index++) {
+        setTimeout(callFn, timeOutInMs * index);
+    }
 }
 
+const documentsSelector = ".cw-ui-checkbox:not(.select-all-docs) input[type=checkbox]";
+const purgeButtonSelector = "purge-action-button";
+const confirmDeleteSelector = "destructive";
 const filesToDelete = 5000;
 const batchSize = 3;
 const timeOutInMs = 2000;
 
-for (let index = 0; index < (filesToDelete / batchSize); index++) {
-    setTimeout(deleteDocs, timeOutInMs * index);
+const removeDocs = (docSelector, purgeButtonSelector, confirmDeleteSelector) => {
+    // Select files
+    pipe(findAll, clickAllNodes)(docSelector);
+    
+    // Click delete
+    pipe(findAllByClassName, getFirstElement, click)(purgeButtonSelector);
+
+    // Confirm deletion
+    pipe(findAllByClassName, getFirstElement, click)(confirmDeleteSelector);
+}
+
+function documentsFound(selector) {
+    const size = pipe(findAll, length)(selector);
+    return size > 0;
+}
+
+if (documentsFound(documentsSelector)) {
+    executeInBatches(filesToDelete, batchSize, timeOutInMs, () => removeDocs(documentsSelector, purgeButtonSelector, confirmDeleteSelector) );
+} else {
+    switchMsg = "Please, switch the active context to the iFrame of the class='cloudos-host'!";
+    alert(switchMsg);
 }
 ```
 
